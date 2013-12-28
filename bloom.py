@@ -25,8 +25,8 @@ class Bloom:
 
     Attributes:
         n -- the expected number of elements to be added
-        to the filter. The value for n will be used for m,
-        the number of bits allocated for the bitarray
+        to the filter. Used for number of bits allocated 
+        for the bitarray
 
         fp -- the false positive value the user is willing
         to tolerate.
@@ -42,24 +42,31 @@ class Bloom:
         except FPError as err:
             print "FPError: %s" % err.message
             sys.exit()
+        self.k = 2
         self.n = n
-        self.bvector = bitarray(n)
+        self.m = int(math.ceil(1 / (1 - (1 - self.fp ** (1 / float(self.k))) ** (1 / (float(self.k) * float(self.n))))))
+        self.eltsAdded = 0
+        self.bvector = bitarray(self.m)
         self.bvector.setall(False)
 
+    def get_fp_prob(self):
+        return (1 - math.exp(-self.k * self.n / self.m))**self.k
+
     def add(self, string):
-        jenkins = abs(hashlittle(string) % self.n)
-        murmur = abs(mmh3.hash(string) % self.n)
+        jenkins = abs(hashlittle(string) % self.m)
+        murmur = abs(mmh3.hash(string) % self.m)
         self.bvector[jenkins] = True
         self.bvector[murmur] = True
+        self.eltsAdded += 1
 
     def query(self, string):
-        jenkins = abs(hashlittle(string) % self.n)
-        murmur = abs(mmh3.hash(string) % self.n)
+        jenkins = abs(hashlittle(string) % self.m)
+        murmur = abs(mmh3.hash(string) % self.m)
         if self.bvector[jenkins] == True and self.bvector[murmur] == True:
-            print "'%s' is possibily in the set" % string
+            print "'%s' is possibily in the set and has a false positive probability of" % string
         else:
             print "'%s' is definitely not in the set" % string
 
 if __name__ == "__main__":
-    b_f = Bloom(1000, .1)
+    b_f = Bloom(100, .1)
 
