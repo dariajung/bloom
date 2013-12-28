@@ -42,11 +42,24 @@ class Bloom:
         except FPError as err:
             print "FPError: %s" % err.message
             sys.exit()
-        self.fp = fp
+        self.n = n
         self.bvector = bitarray(n)
         self.bvector.setall(False)
 
+    def add(self, string):
+        jenkins = abs(hashlittle(string) % self.n)
+        murmur = abs(mmh3.hash(string) % self.n)
+        self.bvector[jenkins] = True
+        self.bvector[murmur] = True
+
+    def query(self, string):
+        jenkins = abs(hashlittle(string) % self.n)
+        murmur = abs(mmh3.hash(string) % self.n)
+        if self.bvector[jenkins] == True and self.bvector[murmur] == True:
+            print "'%s' is possibily in the set" % string
+        else:
+            print "'%s' is definitely not in the set" % string
+
 if __name__ == "__main__":
-    b_f = Bloom(10, .1)
-    print(b_f.fp)
-    print(b_f.bvector)
+    b_f = Bloom(1000, .1)
+
