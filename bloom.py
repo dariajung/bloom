@@ -95,4 +95,4 @@ if __name__ == "__main__":
     b_f.add("Matt")
     b_f.add("Daria")
     b_f.query("Matt")
-    b_f.query("Google")
+    b_f.query("KitKat")
