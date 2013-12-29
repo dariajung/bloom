@@ -74,7 +74,7 @@ The probability of a false positive is:
 * n is the number of expected elements inserted into the filter
 * and m is the number of bits allocated in the bit array
 
-The Bloom class takes as its arguments n and fp (the probability for a false positive). 
+The Bloom class takes as its arguments n, fp (the probability for a false positive), and k. 
 
 It calculates m thusly:
 
