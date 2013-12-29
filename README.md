@@ -3,8 +3,7 @@ Bloom
 
 A simple bloom filter written in Python. 
 
-Uses the Jenkins and Murmur hashes.
-
+Uses the Murmur hash.
 
 ###Bloom Filter
 
