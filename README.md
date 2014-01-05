@@ -81,4 +81,5 @@ It calculates m thusly:
 
 ###Todos:
 * Test with words.txt, which contains over 200000 words.
-* Make the bloom filter serializable. 
+* Make the bloom filter serializable using Pickle.
+* Unit testing using Nose.
